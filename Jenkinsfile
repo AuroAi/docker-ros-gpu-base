@@ -1,7 +1,6 @@
 pipeline {
     agent any 
-    currentBuild.result = "SUCCESS"
-
+    
     stages {
        stage('Checkout'){
            steps {
