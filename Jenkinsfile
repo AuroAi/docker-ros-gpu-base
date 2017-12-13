@@ -1,27 +1,23 @@
-node {
+pipeline {
+    agent any 
+     currentBuild.result = "SUCCESS"
+ try {
 
-
-    currentBuild.result = "SUCCESS"
-
-    try {
-
+    stages {
        stage('Checkout'){
 
           checkout scm
-       }
+        }
+        stage('Build Docker'){
 
-       stage('Test'){
+            print "Build Docker"
+       }
+        
+      stage('Test'){
 
          env.NODE_ENV = "test"
 
          print "stage Test"
-
-        
-       }
-
-       stage('Build Docker'){
-
-            print "Build Docker"
        }
 
        stage('Push'){
@@ -29,13 +25,16 @@ node {
           print "Push Docker"
        }
 
+       stage('Deploy') {
+            steps {
+                sh 'echo  "Deploy"'
+            }
+        }
        stage('Cleanup'){
 
          print "Cleanup"
        }
-
-
-
+    }
     }
     catch (err) {
 
@@ -44,4 +43,6 @@ node {
         throw err
     }
 
+    
 }
+
