@@ -1,45 +1,49 @@
 pipeline {
     agent any 
-     currentBuild.result = "SUCCESS"
+    currentBuild.result = "SUCCESS"
  try {
+        stages {
+           stage('Checkout'){
+               steps {
+                    echo 'Checkout..'
+                    checkout scm
+                }
 
-    stages {
-       stage('Checkout'){
-
-          checkout scm
-        }
-        stage('Build Docker'){
-
-            print "Build Docker"
-       }
-        
-      stage('Test'){
-
-         env.NODE_ENV = "test"
-
-         print "stage Test"
-       }
-
-       stage('Push'){
-
-          print "Push Docker"
-       }
-
-       stage('Deploy') {
-            steps {
-                sh 'echo  "Deploy"'
             }
-        }
-       stage('Cleanup'){
+            stage('Build Docker'){
+                steps {
+                    echo 'Building Docker..'
+                }
+           }
 
-         print "Cleanup"
-       }
-    }
+          stage('Test'){
+
+             steps {
+                    echo 'Testing..'
+                }
+           }
+
+           stage('Push'){
+                steps {
+                    echo 'Pushing Docker..'
+                }
+            }
+
+           stage('Deploy') {
+                steps {
+                    sh 'echo  "Deploy"'
+                }
+            }
+           stage('Cleanup'){
+
+               steps {
+                    echo 'Cleaning up ..'
+                }
+           }
+        }
     }
     catch (err) {
-
         currentBuild.result = "FAILURE"
-
         throw err
     }
 
